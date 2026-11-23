@@ -1,0 +1,57 @@
+import { useEffect, useState } from 'react';
+import { get, put } from '../../services/crm';
+import { errMsg } from '../../services/api';
+import useFetch from '../../hooks/useFetch';
+import { useToast } from '../../context/ToastContext';
+import PageHeader from '../../components/common/PageHeader';
+import Field from '../../components/forms/Field';
+import SiteContentEditor from './SiteContentEditor';
+import { SkeletonBlock } from '../../components/loaders/Skeletons';
+import { ErrorState, Spinner } from '../../components/common/States';
+import './Settings.css';
+
+const TABS = [['agency', 'Agency & documents', 'bi-building'], ['defaults', 'Quotation & invoice defaults', 'bi-sliders'], ['services', 'Services', 'bi-grid'], ['technologies', 'Technologies', 'bi-cpu'], ['about', 'About page', 'bi-info-circle'], ['content', 'About', 'bi-window'], ['testimonials', 'Testimonials', 'bi-chat-quote'], ['team', 'Public team', 'bi-people'], ['blog', 'Blog & case studies', 'bi-journal-text'], ['social', 'Social links', 'bi-share']];
+
+export default function Settings() {
+  const toast = useToast();
+  const { data, loading, error, reload } = useFetch(() => get('/settings'));
+  const [tab, setTab] = useState('agency'); const [v, setV] = useState(null); const [busy, setBusy] = useState(false);
+  useEffect(() => { if (data?.data) { const s = data.data; setV({ ...s, social: s.social || {}, testimonials: s.testimonials || [], publicTeam: s.publicTeam || [], blogPosts: (s.blogPosts || []).map((p) => ({ ...p, tagsText: (p.tags || []).join(', ') })), services: s.services || [], technologies: (s.technologies || []).map((group) => ({ ...group, items: (group.items || []).map((item) => typeof item === 'string' ? { name: item, icon: '' } : item) })), workflow: s.workflow || [], why: s.why || [], aboutStory: s.aboutStory || [], aboutPrinciples: s.aboutPrinciples || [] }); } }, [data]);
+  const set = (k, val) => setV((s) => ({ ...s, [k]: val }));
+  const setList = (key, i, k, val) => setV((s) => ({ ...s, [key]: s[key].map((x, idx) => (idx === i ? { ...x, [k]: val } : x)) }));
+  const setContent = (key, change) => setV((s) => ({ ...s, [key]: typeof change === 'function' ? change(s[key] || []) : change }));
+  const add = (key, item) => setV((s) => ({ ...s, [key]: [...s[key], item] }));
+  const rm = (key, i) => setV((s) => ({ ...s, [key]: s[key].filter((_, x) => x !== i) }));
+
+  const save = async (e) => {
+    e.preventDefault(); setBusy(true);
+    try {
+      const body = { ...v, blogPosts: v.blogPosts.map(({ tagsText, ...p }) => ({ ...p, tags: (tagsText || '').split(',').map((t) => t.trim()).filter(Boolean) })), defaultTaxRate: Number(v.defaultTaxRate) || 0, quotationValidityDays: Number(v.quotationValidityDays) || 15, invoiceDueDays: Number(v.invoiceDueDays) || 7 };
+      delete body._id; delete body.__v; delete body.key; delete body.createdAt; delete body.updatedAt;
+      await put('/settings', body); toast.success('Settings saved'); reload();
+    } catch (err) { toast.error(errMsg(err)); } finally { setBusy(false); }
+  };
+  if (error) return <ErrorState message={error} onRetry={reload} />;
+  return (
+    <>
+      <PageHeader title="Settings" subtitle="Agency details used in PDFs, emails and the public website" crumbs={[{ label: 'Settings' }]} />
+      {loading || !v ? <div className="card-x card-body-x"><SkeletonBlock lines={8} /></div> : (
+        <form onSubmit={save}><div className="row g-3">
+          <div className="col-lg-3"><div className="card-x set-nav">{TABS.map(([k, l, i]) => <button type="button" key={k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}><i className={`bi ${i}`} />{l}</button>)}</div></div>
+          <div className="col-lg-9"><div className="card-x card-body-x" key={tab}>
+            {tab === 'agency' && <div className="row g-3"><Field className="col-md-6" label="Agency name" name="agencyName" value={v.agencyName} onChange={set} /><Field className="col-md-6" label="Tagline" name="tagline" value={v.tagline} onChange={set} /><Field className="col-md-6" label="Email" name="email" type="email" value={v.email} onChange={set} /><Field className="col-md-6" label="Phone" name="phone" value={v.phone} onChange={set} /><Field className="col-md-6" label="Website" name="website" value={v.website} onChange={set} /><Field className="col-md-6" label="GSTIN" name="gstin" value={v.gstin} onChange={set} /><Field className="col-12" label="Address" name="address" value={v.address} onChange={set} /><Field className="col-md-6" label="Authorised signatory" name="signatory" value={v.signatory} onChange={set} hint="Printed on quotations, invoices and certificates" /><Field className="col-12" label="Bank / payment details" name="bankDetails" rows={3} value={v.bankDetails} onChange={set} hint="Shown on invoices and quotations" /></div>}
+            {tab === 'defaults' && <div className="row g-3"><Field className="col-md-4" label="Default tax name" name="defaultTaxName" value={v.defaultTaxName} onChange={set} /><Field className="col-md-4" label="Default tax rate %" name="defaultTaxRate" type="number" min="0" max="100" value={v.defaultTaxRate} onChange={set} /><Field className="col-md-4" label="Currency" name="defaultCurrency" value={v.defaultCurrency} onChange={set} options={['INR', 'USD', 'EUR', 'GBP', 'AED']} /><Field className="col-md-6" label="Quotation validity (days)" name="quotationValidityDays" type="number" min="1" value={v.quotationValidityDays} onChange={set} /><Field className="col-md-6" label="Invoice due (days)" name="invoiceDueDays" type="number" min="1" value={v.invoiceDueDays} onChange={set} /><Field className="col-12" label="Default payment terms" name="defaultPaymentTerms" rows={2} value={v.defaultPaymentTerms} onChange={set} /><Field className="col-12" label="Default terms & conditions" name="defaultTerms" rows={6} value={v.defaultTerms} onChange={set} /></div>}
+            {tab === 'services' && <SiteContentEditor value={v} onChange={setContent} section="services" />}
+            {tab === 'technologies' && <SiteContentEditor value={v} onChange={setContent} section="technologies" />}
+            {tab === 'about' && <SiteContentEditor value={v} onChange={setContent} section="about" />}
+            {tab === 'content' && <SiteContentEditor value={v} onChange={setContent} section="content" />}
+            {tab === 'testimonials' && <><div className="alert alert-light border small">Only add genuine client reviews. Visible ones appear on the public website.</div>{v.testimonials.map((t, i) => <div className="set-item" key={i}><div className="row g-2"><Field className="col-md-4" label="Name" name="n" value={t.name} onChange={(_, x) => setList('testimonials', i, 'name', x)} /><Field className="col-md-4" label="Role" name="r" value={t.role} onChange={(_, x) => setList('testimonials', i, 'role', x)} /><Field className="col-md-4" label="Company" name="c" value={t.company} onChange={(_, x) => setList('testimonials', i, 'company', x)} /><Field className="col-12" label="Quote" name="q" rows={2} value={t.quote} onChange={(_, x) => setList('testimonials', i, 'quote', x)} /><Field className="col-md-3" label="Rating" name="rt" value={t.rating} onChange={(_, x) => setList('testimonials', i, 'rating', Number(x))} options={['5', '4', '3', '2', '1']} /><div className="col-md-5 d-flex align-items-end"><div className="form-check form-switch"><input className="form-check-input" type="checkbox" id={`tv${i}`} checked={t.visible !== false} onChange={(e) => setList('testimonials', i, 'visible', e.target.checked)} /><label className="form-check-label" htmlFor={`tv${i}`}>Visible on website</label></div></div><div className="col-md-4 d-flex align-items-end justify-content-end"><button type="button" className="btn btn-ghost text-danger btn-sm" onClick={() => rm('testimonials', i)}>Remove</button></div></div></div>)}<button type="button" className="btn btn-soft" onClick={() => add('testimonials', { name: '', role: '', company: '', quote: '', rating: 5, visible: true })}><i className="bi bi-plus-lg me-1" />Add testimonial</button></>}
+            {tab === 'team' && <>{v.publicTeam.map((t, i) => <div className="set-item" key={i}><div className="row g-2"><Field className="col-md-6" label="Name" name="n" value={t.name} onChange={(_, x) => setList('publicTeam', i, 'name', x)} /><Field className="col-md-6" label="Title" name="t" value={t.title} onChange={(_, x) => setList('publicTeam', i, 'title', x)} /><Field className="col-12" label="Short bio" name="b" rows={2} value={t.bio} onChange={(_, x) => setList('publicTeam', i, 'bio', x)} /><Field className="col-md-4" label="Photo URL" name="p" value={t.photoUrl} onChange={(_, x) => setList('publicTeam', i, 'photoUrl', x)} /><Field className="col-md-4" label="LinkedIn URL" name="l" value={t.linkedin} onChange={(_, x) => setList('publicTeam', i, 'linkedin', x)} /><Field className="col-md-4" label="GitHub URL" name="g" value={t.github} onChange={(_, x) => setList('publicTeam', i, 'github', x)} /></div><button type="button" className="btn btn-ghost text-danger btn-sm mt-2" onClick={() => rm('publicTeam', i)}>Remove</button></div>)}<button type="button" className="btn btn-soft" onClick={() => add('publicTeam', { name: '', title: '', bio: '' })}><i className="bi bi-plus-lg me-1" />Add team member</button></>}
+            {tab === 'blog' && <>{v.blogPosts.map((p, i) => <div className="set-item" key={i}><div className="row g-2"><Field className="col-md-8" label="Title" name="t" value={p.title} onChange={(_, x) => setList('blogPosts', i, 'title', x)} /><div className="col-md-4 d-flex align-items-end"><div className="form-check form-switch"><input className="form-check-input" type="checkbox" id={`bp${i}`} checked={!!p.published} onChange={(e) => setList('blogPosts', i, 'published', e.target.checked)} /><label className="form-check-label" htmlFor={`bp${i}`}>Published</label></div></div><Field className="col-12" label="Excerpt" name="e" rows={2} value={p.excerpt} onChange={(_, x) => setList('blogPosts', i, 'excerpt', x)} /><Field className="col-12" label="Body (plain text; blank line = new paragraph)" name="bd" rows={6} value={p.body} onChange={(_, x) => setList('blogPosts', i, 'body', x)} /><Field className="col-md-6" label="Cover image URL" name="ci" value={p.coverImage} onChange={(_, x) => setList('blogPosts', i, 'coverImage', x)} /><Field className="col-md-6" label="Tags (comma separated)" name="tg" value={p.tagsText} onChange={(_, x) => setList('blogPosts', i, 'tagsText', x)} /></div><button type="button" className="btn btn-ghost text-danger btn-sm mt-2" onClick={() => rm('blogPosts', i)}>Remove</button></div>)}<button type="button" className="btn btn-soft" onClick={() => add('blogPosts', { title: '', excerpt: '', body: '', published: false, tagsText: '' })}><i className="bi bi-plus-lg me-1" />New article</button></>}
+            {tab === 'social' && <div className="row g-3">{['github', 'linkedin', 'twitter', 'instagram'].map((k) => <Field key={k} className="col-md-6" label={k[0].toUpperCase() + k.slice(1)} name={k} value={v.social[k]} onChange={(n, x) => set('social', { ...v.social, [n]: x })} placeholder="https://…" />)}</div>}
+            <div className="mt-4 pt-3 border-top"><button className="btn btn-primary" disabled={busy}>{busy ? <Spinner /> : 'Save settings'}</button><span className="small text-muted-x ms-3">Changes are recorded in the audit log.</span></div>
+          </div></div>
+        </div></form>)}
+    </>
+  );
+}

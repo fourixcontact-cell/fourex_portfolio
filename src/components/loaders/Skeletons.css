@@ -1,0 +1,3 @@
+.skel-table-head, .skel-table-row { display: grid; gap: 1rem; padding: .95rem 1rem; align-items: center; }
+.skel-table-head { grid-template-columns: repeat(5, 1fr); background: #fbfaff; border-bottom: 1px solid var(--c-line); }
+.skel-table-row { border-bottom: 1px solid #f1eff9; }

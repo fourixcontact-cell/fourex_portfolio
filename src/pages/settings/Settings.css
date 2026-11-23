@@ -1,0 +1,10 @@
+.set-nav { padding: .5rem; } .set-nav button { display: flex; gap: .7rem; align-items: center; width: 100%; border: 0; background: transparent; padding: .65rem .8rem; border-radius: 10px; font-size: .88rem; font-weight: 600; color: #514576; text-align: left; } .set-nav button:hover { background: #f7f4ff; } .set-nav button.on { background: var(--c-primary-50); color: var(--c-primary); }
+.set-item { border: 1px solid var(--c-line); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; background: #fcfbff; }
+.site-content-section { padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--c-line); }
+.site-content-section:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
+.icon-class-preview { display: inline-flex; align-items: center; gap: .45rem; margin-top: .45rem; color: var(--c-muted); font-size: .8rem; }
+.icon-class-preview i { color: var(--c-primary); font-size: 1rem; }
+.technology-admin-list { padding: .9rem; border: 1px solid var(--c-line); border-radius: 12px; background: #fff; }
+.technology-admin-item { padding: .75rem 0; border-top: 1px solid #efecf8; }
+.technology-admin-item:first-of-type { border-top: 0; }
+@media (max-width: 991.98px) { .set-nav { display: flex; overflow-x: auto; } .set-nav button { white-space: nowrap; width: auto; } }

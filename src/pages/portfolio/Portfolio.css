@@ -1,0 +1,6 @@
+.pf-filters { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.2rem; align-items: center; }
+.pf-chips { display: flex; gap: .5rem; flex-wrap: wrap; }
+.chip { border: 1px solid var(--c-line); background: #fff; padding: .5rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: .85rem; color: #33415f; transition: all .25s var(--ease); }
+.chip:hover { border-color: var(--c-primary); color: var(--c-primary); transform: translateY(-2px); box-shadow: 0 8px 16px rgba(106,32,231,.12); }
+.chip.on { background: linear-gradient(135deg, #7331EE, #5116C0); border-color: transparent; color: #fff; box-shadow: 0 8px 18px rgba(106,32,231,.32); }
+.pf-tech { max-width: 220px; }

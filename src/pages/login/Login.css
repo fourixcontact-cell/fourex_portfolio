@@ -1,0 +1,26 @@
+.login-page { min-height: 100vh; display: grid; grid-template-columns: 1.05fr 1fr; background: #fff; }
+.login-side { position: relative; overflow: hidden; background: radial-gradient(520px 420px at -8% -6%, #5a1fe6 0%, #3a0bbc 38%, transparent 64%), radial-gradient(560px 460px at 108% 108%, #6a2ff0 0%, #3a0bbc 40%, transparent 66%), linear-gradient(160deg, #0b0620, #05010f); color: #fff; padding: 2.5rem 3.5rem; flex-direction: column; justify-content: space-between; }
+.login-side::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.16) 1px, transparent 1.2px); background-size: 26px 26px; -webkit-mask-image: linear-gradient(160deg, #000, transparent 70%); mask-image: linear-gradient(160deg, #000, transparent 70%); }
+.login-side > * { position: relative; z-index: 1; }
+.login-side h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -.035em; max-width: 460px; color: #fff; } .login-side p { color: #E3D3FF; max-width: 440px; font-size: 1.05rem; line-height: 1.7; }
+.login-art { position: absolute !important; right: 3rem; bottom: 6.5rem; width: 150px; height: 150px; border-radius: 36px; display: grid; place-items: center; font-size: 4rem; color: #fff; background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,.06)); border: 1px solid rgba(255,255,255,.3); box-shadow: 0 30px 60px rgba(0,0,0,.28); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); animation: floaty2 6s ease-in-out infinite; }
+.login-art::after { content: ''; position: absolute; inset: -22px; border-radius: 50px; border: 1px dashed rgba(255,255,255,.28); }
+@keyframes floaty2 { 50% { transform: translateY(-12px); } }
+.login-main { display: grid; place-items: center; padding: 1.5rem; background: #fff; }
+.login-card { width: 100%; max-width: 440px; background: transparent; border: 0; border-radius: 0; padding: 0; box-shadow: none; }
+.login-card h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em; }
+.login-card .form-label { color: var(--c-ink); }
+.login-card .form-control { height: 56px; padding: .75rem .95rem; background: #f3f6fb; border: 1px solid #dfe4ec; border-radius: 8px !important; font-size: 1rem; color: var(--c-ink); }
+.login-card .form-control:focus { background: #fff; border-color: var(--c-primary); box-shadow: 0 0 0 3px rgba(106,32,231,.12); }
+.login-card .input-group .form-control { height: 56px; }
+.login-card .input-group .btn-ghost { width: 56px; height: 56px; border: 1px solid #dfe4ec; border-left: 0; border-radius: 0 8px 8px 0 !important; background: #fff; }
+.login-card .btn-lg { height: 60px; font-size: 1.25rem; border-radius: 8px !important; }
+.login-card .btn-primary { background: #6A20E7; box-shadow: none; }
+.login-card .btn-primary:hover, .login-card .btn-primary:focus { background: #5116C0; box-shadow: none; transform: none; }
+.login-page, .login-page * { border-radius: 0 !important; }
+.login-art::after { border-radius: 0; }
+@media (max-width: 991.98px) { .login-page { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .login-art { animation: none; } }
+
+/* Fourix logo inside the floating badge */
+.login-art img { width: 92px; height: auto; filter: drop-shadow(0 10px 24px rgba(108,43,242,.55)); }

@@ -1,0 +1,7 @@
+.stat-card { padding: 1.1rem 1.2rem; height: 100%; }
+.stat-ico { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; font-size: 1.15rem; margin-bottom: .8rem; }
+.c-primary { background: #F0E6FF; color: #5116C0; } .c-success { background: #dcfce7; color: #15803d; } .c-warn { background: #fef3c7; color: #b45309; }
+.c-danger { background: #fee2e2; color: #b91c1c; } .c-info { background: #cffafe; color: #0e7490; } .c-purple { background: #F1E9FF; color: #5116C0; }
+.stat-label { font-size: .78rem; color: var(--c-muted); font-weight: 600; }
+.stat-value { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.25; }
+.stat-hint { font-size: .74rem; color: var(--c-muted); margin-top: .2rem; }

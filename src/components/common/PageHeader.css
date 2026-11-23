@@ -1,0 +1,5 @@
+.page-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+.page-header h1 { font-size: 1.55rem; margin: .15rem 0 .15rem; }
+.crumbs { font-size: .78rem; color: var(--c-muted); display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; }
+.crumbs a { color: var(--c-muted); } .crumbs a:hover { color: var(--c-primary); } .crumbs i.bi-chevron-right { font-size: .6rem; margin-right: .35rem; }
+.page-actions { display: flex; gap: .55rem; flex-wrap: wrap; }

@@ -1,0 +1,6 @@
+.cd-av { width: 64px; height: 64px; font-size: 1.3rem; background: linear-gradient(135deg, var(--c-primary), var(--c-accent)); }
+.cd-notes { background: #f9f7fe; border-radius: 10px; padding: .8rem 1rem; white-space: pre-wrap; }
+.cd-tabs { display: flex; gap: .2rem; padding: .6rem .8rem 0; border-bottom: 1px solid var(--c-line); overflow-x: auto; }
+.cd-tabs button { border: 0; background: transparent; padding: .7rem 1rem; font-weight: 600; font-size: .88rem; color: var(--c-muted); border-bottom: 2px solid transparent; white-space: nowrap; }
+.cd-tabs button span { background: #f0ecfa; border-radius: 999px; padding: 0 .5rem; margin-left: .4rem; font-size: .72rem; } .cd-tabs button.on { color: var(--c-primary); border-bottom-color: var(--c-primary); }
+.cred-box { display: flex; gap: .6rem; align-items: center; background: #f5f3fc; padding: .6rem .8rem; border-radius: 10px; justify-content: space-between; } .cred-box code { font-size: 1.05rem; color: var(--c-ink); }
