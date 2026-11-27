@@ -1,0 +1,10 @@
+.chart-wrap { position: relative; }
+.chart-svg { width: 100%; height: auto; display: block; }
+.bar { transform-origin: bottom; transform-box: fill-box; animation: barGrow .6s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.chart-tip { position: absolute; top: 0; right: 0; background: var(--c-ink); color: #fff; font-size: .78rem; padding: .3rem .6rem; border-radius: 8px; }
+.donut-wrap { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+.donut-legend { list-style: none; padding: 0; margin: 0; font-size: .85rem; flex: 1; min-width: 140px; }
+.donut-legend li { display: flex; align-items: center; gap: .5rem; padding: .22rem 0; }
+.donut-legend li span { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.donut-legend li b { margin-left: auto; }

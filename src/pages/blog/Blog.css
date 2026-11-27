@@ -1,0 +1,2 @@
+.blog-card { display: block; color: inherit; overflow: hidden; height: 100%; } .blog-card:hover { color: inherit; }
+.blog-img { height: 170px; background: linear-gradient(135deg, #F0E6FF, #fce7f3) center/cover; display: grid; place-items: center; font-size: 2.4rem; color: #B994FB; }

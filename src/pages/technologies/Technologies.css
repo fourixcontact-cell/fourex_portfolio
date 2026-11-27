@@ -1,0 +1,5 @@
+@media (prefers-reduced-motion: reduce) {
+  .technology-category-card,
+  .technology-item { transition: none; }
+  .technology-category-card:hover { transform: none; }
+}

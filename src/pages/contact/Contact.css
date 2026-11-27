@@ -1,0 +1,3 @@
+.ci { display: flex; gap: .95rem; margin-bottom: 1.3rem; align-items: flex-start; } .ci > i { width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(145deg, #F7F1FF, #F0E6FF); border: 1px solid #E3D3FF; color: var(--c-primary); display: grid; place-items: center; font-size: 1.1rem; flex: none; transition: transform .3s var(--ease), background .3s, color .3s; }
+.ci:hover > i { background: var(--c-primary); color: #fff; transform: rotate(-6deg) scale(1.06); }
+.contact-info { position: sticky; top: 90px; background: linear-gradient(180deg, #fff, #f8fbff); }

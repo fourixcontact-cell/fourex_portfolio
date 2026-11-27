@@ -1,0 +1,6 @@
+src/generated/
+dist/
+node_modules/
+e2e/shots/
+.env.local
+.env.production

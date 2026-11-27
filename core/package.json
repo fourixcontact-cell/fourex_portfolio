@@ -1,0 +1,6 @@
+{
+  "name": "fourix-core",
+  "private": true,
+  "type": "commonjs",
+  "description": "Fourix business logic. Runs in the browser (bundled by scripts/build-core.mjs) and in Node tests."
+}

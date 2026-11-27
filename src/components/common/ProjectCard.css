@@ -1,0 +1,15 @@
+.pcard { display: block; color: inherit; overflow: hidden; height: 100%; position: relative; }
+.pcard:hover { color: inherit; }
+.pcard-img { height: 210px; position: relative; overflow: hidden; display: grid; place-items: center; font-size: 2.6rem; color: #B994FB; background: linear-gradient(135deg, #F0E6FF, #F6EFFF); }
+.pcard-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.02); transition: opacity .55s ease, transform .7s var(--ease); }
+.pcard-bg.is-loaded { opacity: 1; transform: scale(1); }
+.pcard-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(29,14,71,.25)); opacity: 0; transition: opacity .4s; }
+.pcard:hover .pcard-bg { transform: scale(1.07); } .pcard:hover .pcard-img::after { opacity: 1; }
+.pcard-img > i { position: relative; z-index: 1; transition: transform .5s var(--ease); } .pcard:hover .pcard-img > i { transform: scale(1.12) translateY(-3px); }
+.pcard-feat { position: absolute; z-index: 2; top: 14px; left: 14px; background: #fff; color: #b45309; font-size: .72rem; font-weight: 700; padding: .3rem .7rem; border-radius: 999px; box-shadow: 0 6px 16px rgba(29,14,71,.15); }
+.pcard-body { position: relative; padding-right: 4rem; }
+.pcard-go { position: absolute; right: 1.1rem; bottom: 1.1rem; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--c-primary-50); color: var(--c-primary); border: 1px solid #E3D3FF; transition: background .3s, color .3s, transform .35s var(--ease), box-shadow .3s; }
+.pcard:hover .pcard-go { background: var(--c-primary); color: #fff; transform: translate(2px, -2px) rotate(-45deg); box-shadow: 0 8px 18px rgba(106,32,231,.35); }
+.pcard::before { content: ''; position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, var(--c-primary), #A675FA); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); }
+.pcard:hover::before { transform: scaleX(1); }
+.pcard-sum { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.6em; }

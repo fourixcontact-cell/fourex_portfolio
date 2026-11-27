@@ -1,0 +1,30 @@
+# Cloudflare Pages response headers. Firebase Auth + Firestore are the only APIs the app talks to.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com; frame-src 'self' https://*.firebaseapp.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/pdf/*
+  Cache-Control: public, max-age=2592000
+
+# Private / transactional pages: never index (server-side, independent of JavaScript)
+/login
+  X-Robots-Tag: noindex, nofollow
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+/crm
+  X-Robots-Tag: noindex, nofollow
+/crm/*
+  X-Robots-Tag: noindex, nofollow
+/portal
+  X-Robots-Tag: noindex, nofollow
+/portal/*
+  X-Robots-Tag: noindex, nofollow
+/quotation/view/*
+  X-Robots-Tag: noindex, nofollow

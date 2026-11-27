@@ -1,0 +1,4 @@
+.enq-form { position: relative; }
+.enq-success { text-align: center; padding: 2.5rem 1rem; animation: pageIn .5s both; }
+.enq-check { width: 76px; height: 76px; border-radius: 50%; background: #dcfce7; color: #16a34a; display: grid; place-items: center; font-size: 2.2rem; margin: 0 auto 1.2rem; animation: pop .5s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }

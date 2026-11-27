@@ -1,0 +1,193 @@
+rules_version = '2';
+
+// ============================================================================================
+//  Fourix — Firestore security rules
+//  There is no server: these rules are what keeps the data safe. Paste the whole file into
+//  Firebase console → Firestore Database → Rules → Publish.
+//
+//  ✏️  STEP 1: put your four admin login emails below (lowercase), then publish.
+// ============================================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function adminEmails() {
+      return [
+        'salih@gmail.com',
+        'shifaa@gmail.com',
+        'menal@gmail.com',
+        'prakash@gmail.com'
+      ];
+    }
+
+    // ---------------------------------------------------------------- helpers
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function tokenEmail() { return request.auth.token.email.lower(); }
+    function userPath(id) { return /databases/$(database)/documents/users/$(id); }
+    function me() { return get(userPath(uid())).data; }
+
+    // A login older than 12 hours, or older than the last "sign out everywhere" / password
+    // change, no longer counts.
+    function loginMs() { return request.auth.token.auth_time * 1000; }
+    function fresh(u) {
+      return request.time.toMillis() < loginMs() + 12 * 3600 * 1000
+        && (!('forcedOutAt' in u) || u.forcedOutAt == null || loginMs() >= u.forcedOutAt.toMillis());
+    }
+
+    function isListedAdmin() { return signedIn() && tokenEmail() in adminEmails(); }
+
+    function isAdmin() {
+      return isListedAdmin()
+        && exists(userPath(uid()))
+        && me().role == 'admin'
+        && me().isActive == true
+        && me().get('isPasswordChanged', false) == true
+        && fresh(me());
+    }
+
+    function isClient() {
+      return signedIn()
+        && exists(userPath(uid()))
+        && me().role == 'client'
+        && me().isActive == true
+        && fresh(me());
+    }
+
+    function isClientOf(clientId) { return isClient() && string(me().clientId) == clientId; }
+
+    function onlyChanges(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+    function str(v, min, max) { return v is string && v.size() >= min && v.size() <= max; }
+    function optStr(d, k, max) { return !(k in d) || (d[k] is string && d[k].size() <= max); }
+
+    // ---------------------------------------------------------------- users
+    match /users/{userId} {
+      allow read: if isAdmin() || (signedIn() && uid() == userId);
+
+      // An admin's own profile is created on their first login — only for the listed emails.
+      allow create: if (
+          signedIn() && uid() == userId && isListedAdmin()
+          && request.resource.data.role == 'admin'
+          && request.resource.data.isActive == true
+          && request.resource.data.isPasswordChanged == false
+          && request.resource.data.email == tokenEmail()
+        ) || (
+          // Client portal logins are created by an admin.
+          isAdmin() && request.resource.data.role == 'client' && request.resource.data.get('clientId', '') is string
+        );
+
+      allow update: if (
+          // Admins may edit anyone, but nobody can be turned into an admin here.
+          isAdmin() && request.resource.data.role == resource.data.role
+        ) || (
+          // Everyone may update their own login details, password-change flags, name and phone.
+          signedIn() && uid() == userId
+          && onlyChanges(['lastLoginAt', 'lastLoginDevice', 'isPasswordChanged', 'passwordChangedAt', 'forcedOutAt', 'updatedAt', 'name', 'phone'])
+          && (!('forcedOutAt' in request.resource.data) || request.resource.data.forcedOutAt == null || request.resource.data.forcedOutAt <= request.time)
+        );
+
+      allow delete: if isAdmin() && resource.data.role == 'client';
+    }
+
+    // ---------------------------------------------------------------- sign-in sessions
+    match /sessions/{id} {
+      allow read: if isAdmin() || (signedIn() && resource.data.user == uid());
+      allow create: if signedIn() && request.resource.data.user == uid();
+      allow update: if isAdmin() || (signedIn() && resource.data.user == uid() && request.resource.data.user == uid());
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------- audit trail (append-only)
+    match /auditlogs/{id} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        || (signedIn() && request.resource.data.adminId == uid()
+            && request.resource.data.action in ['LOGIN', 'LOGOUT', 'PASSWORD_CHANGE']);
+      allow update, delete: if false;
+    }
+
+    // ---------------------------------------------------------------- leads (website forms)
+    function validPublicLead(d) {
+      return d.keys().hasOnly(['name', 'company', 'email', 'phone', 'country', 'service', 'budget', 'preferredContact', 'description', 'source', 'isQuoteRequest', 'status', 'isArchived', 'createdAt', 'updatedAt'])
+        && str(d.name, 2, 120)
+        && str(d.email, 5, 160) && d.email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$')
+        && str(d.phone, 7, 20)
+        && str(d.country, 1, 80)
+        && str(d.get('service', ''), 1, 120)
+        && str(d.description, 20, 5000)
+        && optStr(d, 'company', 160) && optStr(d, 'budget', 80)
+        && d.get('preferredContact', 'any') in ['email', 'phone', 'whatsapp', 'any']
+        && d.source in ['Website Contact Form', 'Website – Get a Quote']
+        && d.isQuoteRequest is bool
+        && d.status == 'New' && d.isArchived == false
+        && d.createdAt == request.time && d.updatedAt == request.time;
+    }
+    match /leads/{id} {
+      allow read, update, delete: if isAdmin();
+      allow create: if isAdmin() || validPublicLead(request.resource.data);
+    }
+
+    // ---------------------------------------------------------------- website content (public)
+    match /public/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Tracked quotation links: anyone with the (random, 48-character) token may read that one
+    // document and stamp "viewed" once.
+    match /quotationViews/{token} {
+      allow get: if true;
+      allow list, create, delete: if isAdmin();
+      allow update: if isAdmin() || (
+        resource.data.status == 'Sent'
+        && resource.data.get('viewedAt', null) == null
+        && onlyChanges(['viewedAt'])
+        && request.resource.data.viewedAt == request.time
+      );
+    }
+
+    // ---------------------------------------------------------------- client portal
+    match /portal/{clientId} {
+      allow read: if isAdmin() || isClientOf(clientId);
+      allow write: if isAdmin();
+      match /items/{key} {
+        allow read: if isAdmin() || isClientOf(clientId);
+        allow write: if isAdmin();
+      }
+    }
+
+    // What clients submit from the portal; the CRM applies it and deletes it.
+    match /portalInbox/{id} {
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == uid());
+      allow create: if isClient()
+        && request.resource.data.keys().hasOnly(['uid', 'clientId', 'kind', 'payload', 'at', 'createdAt'])
+        && request.resource.data.uid == uid()
+        && request.resource.data.clientId == string(me().clientId)
+        && request.resource.data.kind in ['feedback', 'changeRequest', 'quotationDecision', 'ticketCreate', 'ticketReply']
+        && str(request.resource.data.payload, 2, 20000)
+        && request.resource.data.at is string && request.resource.data.at.size() < 40;
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------- stored files
+    function clientMayRead(key) {
+      return isClient() && key in get(/databases/$(database)/documents/portal/$(string(me().clientId))).data.get('fileKeys', []);
+    }
+    match /files/{key} {
+      allow read: if isAdmin() || clientMayRead(key);
+      allow write: if isAdmin();
+    }
+    match /filechunks/{id} {
+      allow read: if isAdmin() || clientMayRead(resource.data.key);
+      allow write: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------- everything else: admins only
+    match /{col}/{id} {
+      allow read, write: if isAdmin() && col in [
+        'clients', 'projects', 'tasks', 'quotations', 'invoices', 'payments', 'expenses',
+        'documents', 'milestones', 'notifications', 'settings', 'supporttickets', 'counters', '_meta'
+      ];
+    }
+  }
+}

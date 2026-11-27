@@ -1,0 +1,2 @@
+.pj-card { display: block; padding: 1.1rem 1.2rem; color: inherit; height: 100%; } .pj-card:hover { color: inherit; }
+.chip-sel { border: 1px solid var(--c-line); background: #fff; border-radius: 999px; padding: .4rem .9rem; font-size: .85rem; font-weight: 600; transition: all .2s; } .chip-sel.on { background: var(--c-primary-50); border-color: var(--c-primary); color: var(--c-primary); }

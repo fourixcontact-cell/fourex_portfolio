@@ -1,0 +1,11 @@
+# https://www.fourix.in/robots.txt
+User-agent: *
+Allow: /
+# Private areas (CRM, client portal, admin login, API, private quotation links)
+Disallow: /crm/
+Disallow: /portal/
+Disallow: /admin/
+Disallow: /quotation/view/
+Disallow: /api/
+
+Sitemap: https://www.fourix.in/sitemap.xml
