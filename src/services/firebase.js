@@ -69,7 +69,11 @@ export const authApi = {
       deleteApp(tmp).catch(() => {});
     }
   },
+<<<<<<< HEAD
   sendPasswordReset: (email) => sendPasswordResetEmail(auth, email, { url: `${window.location.origin}/login` })
+=======
+  sendPasswordReset: (email) => sendPasswordResetEmail(auth, email, { url: `${window.location.origin}/portal/login` })
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 };
 
 export async function hasSession() {

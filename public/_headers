@@ -12,6 +12,7 @@
 
 /pdf/*
   Cache-Control: public, max-age=2592000
+<<<<<<< HEAD
 
 # Private / transactional pages: never index (server-side, independent of JavaScript)
 /login
@@ -28,3 +29,5 @@
   X-Robots-Tag: noindex, nofollow
 /quotation/view/*
   X-Robots-Tag: noindex, nofollow
+=======
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2

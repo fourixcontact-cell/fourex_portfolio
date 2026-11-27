@@ -25,6 +25,7 @@ const row = (k, v) => `<tr><td style="padding:6px 12px 6px 0;color:#6b7280;verti
  * Never throws. Returns { ok, id?, error? } so callers can persist the outcome
  * (e.g. a Lead is already saved before any email is attempted).
  */
+<<<<<<< HEAD
 async function send({ to, recipient, subject, html, attachments, replyTo }) {
   // Sent by the Cloudflare Pages Function /api/email (it holds the Resend key; the browser never
   // sees it). If that function or its key isn't set up, emails are simply skipped.
@@ -34,6 +35,13 @@ async function send({ to, recipient, subject, html, attachments, replyTo }) {
       subject: String(subject).replace(/[\r\n]+/g, ' ').slice(0, 250),
       html
     };
+=======
+async function send({ to, subject, html, attachments, replyTo }) {
+  // Sent by the Cloudflare Pages Function /api/email (it holds the Resend key; the browser never
+  // sees it). If that function or its key isn't set up, emails are simply skipped.
+  try {
+    const payload = { to: Array.isArray(to) ? to : [to], subject: String(subject).replace(/[\r\n]+/g, ' ').slice(0, 250), html };
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
     if (attachments?.length) {
       payload.attachments = attachments.map((x) => ({ filename: x.filename, content: Buffer.isBuffer(x.content) ? x.content.toString('base64') : x.content }));
     }
@@ -56,7 +64,11 @@ function notifyAgencyOfLead(lead) {
      <p style="margin-top:18px;font-size:14px;line-height:1.6;white-space:pre-wrap;background:#f7f7fd;padding:14px;border-radius:10px">${esc(lead.description)}</p>
      <p><a href="${esc(config.clientUrl)}/crm/leads" style="display:inline-block;background:#6c2bf2;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Open in CRM</a></p>`
   );
+<<<<<<< HEAD
   return send({ recipient: 'agency', subject: `New ${lead.isQuoteRequest ? 'quote request' : 'enquiry'}: ${lead.name}${lead.company ? ` (${lead.company})` : ''}`, html, replyTo: lead.email });
+=======
+  return send({ to: config.agencyEmail, subject: `New ${lead.isQuoteRequest ? 'quote request' : 'enquiry'}: ${lead.name}${lead.company ? ` (${lead.company})` : ''}`, html, replyTo: lead.email });
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 }
 
 function acknowledgeLead(lead) {
@@ -67,7 +79,11 @@ function acknowledgeLead(lead) {
      <p style="font-size:14px;line-height:1.6;white-space:pre-wrap;background:#f7f7fd;padding:14px;border-radius:10px">${esc(lead.description)}</p>
      <p style="font-size:14px">Warm regards,<br><b>${esc(config.agency.name)}</b></p>`
   );
+<<<<<<< HEAD
   return send({ to: lead.email, subject: `We received your enquiry – ${config.agency.name}`, html });
+=======
+  return send({ to: lead.email, subject: `We received your enquiry – ${config.agency.name}`, html, replyTo: config.agencyEmail });
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 }
 
 function sendQuotationEmail(q, client, pdfBuffer, viewUrl) {
@@ -83,6 +99,10 @@ function sendQuotationEmail(q, client, pdfBuffer, viewUrl) {
     to: client.email,
     subject: `Quotation ${q.number} – ${q.projectName}`,
     html,
+<<<<<<< HEAD
+=======
+    replyTo: config.agencyEmail,
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
     attachments: [{ filename: `${q.number}.pdf`, content: pdfBuffer }]
   });
 }
@@ -100,6 +120,10 @@ function sendInvoiceEmail(inv, client, pdfBuffer, reminder = false) {
     to: client.email,
     subject: `${reminder ? 'Reminder: ' : ''}Invoice ${inv.number} – ${money(inv.balance)} due ${fmtDate(inv.dueDate)}`,
     html,
+<<<<<<< HEAD
+=======
+    replyTo: config.agencyEmail,
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
     attachments: [{ filename: `${inv.number}.pdf`, content: pdfBuffer }]
   });
 }
@@ -109,11 +133,20 @@ function sendReceiptEmail(payment, client, pdfBuffer) {
     `Payment received – ${payment.receiptNumber}`,
     `<p style="font-size:15px;line-height:1.7">Hello ${esc(client.contactPerson)}, we have received your payment of <b>${money(payment.amount)}</b> on ${fmtDate(payment.paidOn)}. Your receipt is attached. Thank you!</p>`
   );
+<<<<<<< HEAD
   return send({ to: client.email, subject: `Payment receipt ${payment.receiptNumber}`, html, attachments: [{ filename: `${payment.receiptNumber}.pdf`, content: pdfBuffer }] });
 }
 
 function notifyAdmins(subject, title, bodyHtml) {
   return send({ recipient: 'agency', subject, html: layout(title, bodyHtml) });
+=======
+  return send({ to: client.email, subject: `Payment receipt ${payment.receiptNumber}`, html, replyTo: config.agencyEmail, attachments: [{ filename: `${payment.receiptNumber}.pdf`, content: pdfBuffer }] });
+}
+
+function notifyAdmins(subject, title, bodyHtml) {
+  if (!config.agencyEmail) return Promise.resolve({ ok: false, error: 'AGENCY_EMAIL missing' });
+  return send({ to: config.agencyEmail, subject, html: layout(title, bodyHtml) });
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 }
 
 module.exports = { send, esc, money, fmtDate, notifyAgencyOfLead, acknowledgeLead, sendQuotationEmail, sendInvoiceEmail, sendReceiptEmail, notifyAdmins };

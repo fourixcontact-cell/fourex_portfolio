@@ -12,10 +12,10 @@ service cloud.firestore {
 
     function adminEmails() {
       return [
-        'salih@gmail.com',
-        'shifaa@gmail.com',
-        'menal@gmail.com',
-        'prakash@gmail.com'
+        'shifa@example.com',
+        'menal@example.com',
+        'salih@example.com',
+        'salihfriend@example.com'
       ];
     }
 
@@ -112,7 +112,7 @@ service cloud.firestore {
         && str(d.email, 5, 160) && d.email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$')
         && str(d.phone, 7, 20)
         && str(d.country, 1, 80)
-        && str(d.get('service', ''), 1, 120)
+        && str(d.service, 1, 120)
         && str(d.description, 20, 5000)
         && optStr(d, 'company', 160) && optStr(d, 'budget', 80)
         && d.get('preferredContact', 'any') in ['email', 'phone', 'whatsapp', 'any']

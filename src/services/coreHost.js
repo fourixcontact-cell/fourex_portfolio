@@ -14,7 +14,11 @@ const env = {
   agency: {
     name: 'Fourix',
     tagline: import.meta.env.VITE_AGENCY_TAGLINE || 'Software Development Studio',
+<<<<<<< HEAD
     email: import.meta.env.VITE_PUBLIC_AGENCY_EMAIL || import.meta.env.VITE_AGENCY_EMAIL || ''
+=======
+    email: import.meta.env.VITE_AGENCY_EMAIL || ''
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
   }
 };
 

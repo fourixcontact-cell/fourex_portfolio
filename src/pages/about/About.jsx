@@ -1,6 +1,10 @@
 import { useOutletContext } from 'react-router-dom';
 import CtaBand from '../../components/common/CtaBand';
 import ContentIcon from '../../components/common/ContentIcon';
+<<<<<<< HEAD
+=======
+import useReveal from '../../utils/useReveal';
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 import './About.css';
 
 const STORY_DEFAULTS = [
@@ -18,11 +22,16 @@ export default function About() {
   const why = site?.why || [];
   const story = site?.aboutStory?.length ? site.aboutStory : STORY_DEFAULTS;
   const principles = site?.aboutPrinciples?.length ? site.aboutPrinciples : PRINCIPLE_DEFAULTS;
+<<<<<<< HEAD
+=======
+  useReveal();
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
   return (
     <>
       <section className="page-hero"><div className="container"><span className="eyebrow">About us</span><h1>A small, senior team that <span className="grad-text">ships software that works</span></h1><p>We are a freelance software development agency helping startups and businesses design, build and run dependable digital products.</p></div></section>
       <section className="sec">
         <div className="container"><div className="row gy-5 gx-lg-5 align-items-center">
+<<<<<<< HEAD
           <div className="col-lg-6 reveal">
             <article className="about-story-card">
               <div className="about-story-heading">
@@ -34,6 +43,9 @@ export default function About() {
               </div>
             </article>
           </div>
+=======
+          <div className="col-lg-6 reveal"><h2 className="mb-3">Our story</h2>{story.map((paragraph, index) => <p className="text-muted-x" key={`${index}-${paragraph}`}>{paragraph}</p>)}</div>
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
           <div className="col-lg-6 reveal"><div className="about-values">
             {principles.map((principle) => (
               <div className="card-x card-body-x d-flex gap-3" key={principle.title}><div className="feature-ico mb-0"><ContentIcon icon={principle.icon} /></div><div><h6 className="mb-1">{principle.title}</h6><p className="text-muted-x small mb-0">{principle.text}</p></div></div>))}

@@ -34,6 +34,7 @@ export default function PublicLayout() {
       <Navbar expand="lg" expanded={expanded} onToggle={setExpanded} fixed="top" className={`pub-nav ${scrolled || expanded ? 'solid' : ''}`}>
         <Container>
           <Navbar.Brand as={Link} to="/" className="pub-brand"><BrandMark />{name}</Navbar.Brand>
+<<<<<<< HEAD
           <Navbar.Toggle
             aria-controls="pub-nav"
             label={expanded ? 'Close menu' : 'Open menu'}
@@ -46,6 +47,9 @@ export default function PublicLayout() {
               <span />
             </span>
           </Navbar.Toggle>
+=======
+          <Navbar.Toggle aria-controls="pub-nav" />
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
           <Navbar.Collapse id="pub-nav">
             <Nav className="mx-auto">{links.map(([to, l]) => <Nav.Link key={to} as={NavLink} to={to} end={to === '/'}>{l}</Nav.Link>)}</Nav>
             <div className="d-flex gap-2 mt-3 mt-lg-0">

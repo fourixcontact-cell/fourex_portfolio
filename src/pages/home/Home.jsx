@@ -5,13 +5,22 @@ import ProjectCard from '../../components/common/ProjectCard';
 import ContentIcon from '../../components/common/ContentIcon';
 import { SkeletonProjectCards, Skel } from '../../components/loaders/Skeletons';
 import CtaBand from '../../components/common/CtaBand';
+<<<<<<< HEAD
+=======
+import useReveal from '../../utils/useReveal';
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 import './Home.css';
 
 export default function Home() {
   const { site } = useOutletContext() || {};
   const [projects, setProjects] = useState(null);
+<<<<<<< HEAD
   const [heroImageReady, setHeroImageReady] = useState(false);
   useEffect(() => { publicApi.portfolio().then((r) => setProjects(r.data.slice(0, 3))).catch(() => setProjects([])); }, []);
+=======
+  useEffect(() => { publicApi.portfolio().then((r) => setProjects(r.data.slice(0, 3))).catch(() => setProjects([])); }, []);
+  useReveal(projects?.length);
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
   const services = site?.services || [];
   const technologies = site?.technologies || [];
   const workflow = site?.workflow || [];
@@ -25,13 +34,21 @@ export default function Home() {
         <div className="container position-relative">
           <div className="row align-items-center gy-4 gx-lg-4">
             <div className="col-lg-6">
+<<<<<<< HEAD
+=======
+              <span className="eyebrow hero-eyebrow"><i className="bi bi-rocket-takeoff" />Freelance software development agency<span className="eyebrow-dot" aria-hidden="true" /></span>
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
               <h1 className="hero-title">We build <span className="grad-text">reliable software</span> that grows your business.</h1>
               <p className="hero-sub">From MERN-stack web apps and mobile apps to design and cloud deployment, we take your idea from first sketch to a secure, production-ready product, with clear milestones and honest pricing.</p>
               <div className="d-flex gap-3 flex-wrap align-items-center"><Link to="/quote" className="btn btn-primary btn-lg">Get a free quote <i className="bi bi-arrow-right ms-1" /></Link><Link to="/portfolio" className="hero-secondary"><span className="hero-secondary-ico"><i className="bi bi-arrow-up-right" /></span>See our work</Link></div>
               <ul className="hero-points"><li><i className="bi bi-rocket-takeoff" />Milestone-based delivery</li><li><i className="bi bi-shield-check" />Client portal with live progress</li><li><i className="bi bi-headset" />Formal handover &amp; support</li></ul>
             </div>
             <div className="col-lg-6">
+<<<<<<< HEAD
               <div className="hero-art"><img className={`hero-robot ${heroImageReady ? 'is-loaded' : ''}`} src="/hero-robot.jpg" alt="" width="826" height="630" decoding="async" onLoad={() => setHeroImageReady(true)} onError={() => setHeroImageReady(true)} /></div>
+=======
+              <div className="hero-art"><img className="hero-robot" src="/hero-robot.jpg" alt="" width="826" height="630" decoding="async" /></div>
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
             </div>
           </div>
           <a href="#what-we-do" className="hero-explore"><span className="hero-explore-ico"><i className="bi bi-arrow-down" /></span>Explore more</a>
@@ -65,6 +82,7 @@ export default function Home() {
 
       <section className="sec">
         <div className="container">
+<<<<<<< HEAD
           <div className="sec-head reveal"><span className="eyebrow">Technologies</span><h2>Modern tools, proven in production</h2><p>An intentional mix of proven tools for polished interfaces, dependable systems, and products built to scale.</p></div>
           <div className="row g-4">{technologies.map((g) => (
             <div className="col-md-6 col-lg-4 reveal" key={g.group}>
@@ -85,6 +103,11 @@ export default function Home() {
                 </ul>
               </article>
             </div>
+=======
+          <div className="sec-head reveal"><span className="eyebrow">Technologies</span><h2>Modern tools, proven in production</h2></div>
+          <div className="row g-4">{technologies.map((g) => (
+            <div className="col-md-6 col-lg-4 reveal" key={g.group}><div className="card-x card-body-x technology-category-card h-100"><h6 className="mb-3 technology-category-title"><ContentIcon icon={g.icon} />{g.group}</h6>{g.items.map((entry, i) => { const t = typeof entry === 'string' ? { name: entry } : entry; return <span key={`${t.name}-${i}`} className="tag technology-tag">{t.icon && <ContentIcon icon={t.icon} />}{t.name}</span>; })}</div></div>
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
           ))}</div>
         </div>
       </section>

@@ -53,9 +53,13 @@ async function scan() {
   }
 
   if (digest.length) {
+<<<<<<< HEAD
     notifyAdmins(`CRM reminders (${digest.length})`, 'Daily reminders', `<ul style="font-size:14px;line-height:1.8">${digest.map((d) => `<li>${esc(d)}</li>`).join('')}</ul>`)
       .then((result) => { if (!result.ok) console.warn('[email] CRM reminder digest not sent:', result.error); })
       .catch((e) => console.warn('[email] CRM reminder digest failed:', e.message));
+=======
+    notifyAdmins(`CRM reminders (${digest.length})`, 'Daily reminders', `<ul style="font-size:14px;line-height:1.8">${digest.map((d) => `<li>${esc(d)}</li>`).join('')}</ul>`).catch(() => {});
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
   }
 }
 

@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 import { useState } from 'react';
+=======
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 import { Link } from 'react-router-dom';
 import './ProjectCard.css';
 
 export default function ProjectCard({ p }) {
+<<<<<<< HEAD
   const [loadedImage, setLoadedImage] = useState('');
   const [failedImage, setFailedImage] = useState('');
   const hasCover = p.coverImage && failedImage !== p.coverImage;
@@ -13,6 +17,12 @@ export default function ProjectCard({ p }) {
         {hasCover
           ? <img className={`pcard-bg ${loadedImage === p.coverImage ? 'is-loaded' : ''}`} src={p.coverImage} alt={p.title} loading="lazy" decoding="async" onLoad={() => setLoadedImage(p.coverImage)} onError={() => setFailedImage(p.coverImage)} />
           : <i className="bi bi-window-stack" />}
+=======
+  return (
+    <Link to={`/portfolio/${p.id}`} className="card-x hoverable pcard">
+      <div className="pcard-img">
+        {p.coverImage ? <div className="pcard-bg" style={{ backgroundImage: `url(${p.coverImage})` }} /> : <i className="bi bi-window-stack" />}
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
         {p.featured && <span className="pcard-feat"><i className="bi bi-star-fill me-1" />Featured</span>}
       </div>
       <div className="card-body-x pcard-body">

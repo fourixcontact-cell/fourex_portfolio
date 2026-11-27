@@ -19,7 +19,7 @@ Firebase console → **Authentication** → **Users** → **Add user**. Enter ea
 
 ### Step 2. Publish the security rules (important)
 1. Open the file `firestore.rules` from this project.
-2. At the top, replace the remaining example addresses with the other authorised admin emails (lowercase). Keep `mdsalih133@gmail.com` in the list if it is one of your four admins.
+2. At the top, replace `admin1@example.com` … `admin4@example.com` with the same 4 emails (lowercase).
 3. Firebase console → **Firestore Database** → **Rules** tab → delete everything → paste the whole file → **Publish**.
 
 These rules are what protect your data, since there is no server.
@@ -45,7 +45,6 @@ Firebase console → **Authentication** → **Settings** → **Authorized domain
    | `VITE_FIREBASE_AUTH_DOMAIN` | `fourex-93596.firebaseapp.com` |
    | `VITE_FIREBASE_PROJECT_ID` | `fourex-93596` |
    | `VITE_FIREBASE_APP_ID` | `1:…:web:…` |
-   | `VITE_PUBLIC_AGENCY_EMAIL` | public contact shown in PDFs and email templates (optional) |
    | `NODE_VERSION` | `20` |
 
 5. **Save and Deploy**. Your site is at `https://<name>.pages.dev`.
@@ -77,13 +76,11 @@ Without this, everything works except sending emails (quotation/invoice emails, 
    | `RESEND_API_KEY` (secret) | `re_…` |
    | `EMAIL_FROM` | `Fourix <hello@yourdomain.com>` |
    | `FIREBASE_PROJECT_ID` | `fourex-93596` |
-   | `ADMIN_EMAILS` | the same 4 admin emails from the Firestore rules, comma-separated |
-   | `AGENCY_EMAIL` | delivery address for agency notifications; defaults to `ADMIN_EMAILS` |
+   | `ADMIN_EMAILS` | the 4 admin emails, comma-separated |
+   | `AGENCY_EMAIL` | where new enquiries go (optional) |
    | `SEND_ACKNOWLEDGEMENT` | `on` to also email visitors a "we got your message" note |
 
 3. Redeploy (Deployments → … → Retry deployment).
-
-`AGENCY_EMAIL` is the Pages Function's single source for agency-directed delivery and default reply-to. `VITE_PUBLIC_AGENCY_EMAIL` is only a public contact address embedded in PDFs and email templates; it does not control delivery. `VITE_AGENCY_EMAIL` remains a compatibility fallback for that display value only. The Resend API key must be configured as a Pages Function secret and is never placed in frontend variables.
 
 ---
 

@@ -17,6 +17,10 @@ const config = {
   get maxUploadMb() { return Math.min(Number(env().maxUploadMb) || 10, 15); },
   // Kept for code that still reads it; admin emails are enforced by firestore.rules.
   get admins() { return env().admins || []; },
+<<<<<<< HEAD
+=======
+  get agencyEmail() { return env().agency?.email || ''; },
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
   get agency() {
     const a = env().agency || {};
     return {

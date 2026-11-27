@@ -5,6 +5,10 @@ import ProjectCard from '../../components/common/ProjectCard';
 import { SkeletonProjectCards } from '../../components/loaders/Skeletons';
 import { EmptyState, ErrorState } from '../../components/common/States';
 import CtaBand from '../../components/common/CtaBand';
+<<<<<<< HEAD
+=======
+import useReveal from '../../utils/useReveal';
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 import './Portfolio.css';
 
 export default function Portfolio() {
@@ -21,6 +25,10 @@ export default function Portfolio() {
     catch (e) { setError(errMsg(e)); } finally { setLoading(false); }
   };
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [cat, tech]);
+<<<<<<< HEAD
+=======
+  useReveal(data?.length);
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 
   return (
     <>

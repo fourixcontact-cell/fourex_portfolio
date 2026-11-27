@@ -5,7 +5,10 @@ import { errMsg } from '../../services/api';
 import { Skel } from '../../components/loaders/Skeletons';
 import { ErrorState } from '../../components/common/States';
 import CtaBand from '../../components/common/CtaBand';
+<<<<<<< HEAD
 import { useSeo, trim } from '../../seo/seo';
+=======
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 import './PortfolioDetail.css';
 
 export default function PortfolioDetail() {
@@ -14,7 +17,10 @@ export default function PortfolioDetail() {
   const [error, setError] = useState('');
   useEffect(() => { setP(null); publicApi.portfolioItem(id).then((r) => setP(r.data)).catch((e) => setError(errMsg(e))); }, [id]);
 
+<<<<<<< HEAD
   useSeo({ title: p?.title ? `${p.title} – ${p.category || 'Project'} | Fourix Portfolio` : '', description: trim(p?.summary || ''), path: `/portfolio/${id}`, image: p?.coverImage });
+=======
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
   if (error) return <div className="container pd-wrap"><ErrorState message={error} /><div className="text-center"><Link to="/portfolio" className="btn btn-soft">Back to portfolio</Link></div></div>;
   if (!p) return <div className="container pd-wrap"><Skel w="40%" h={34} /><Skel h={320} className="mt-4" r={16} /><Skel w="80%" className="mt-4" /><Skel w="70%" className="mt-2" /></div>;
   return (

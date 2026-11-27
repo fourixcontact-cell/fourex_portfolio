@@ -1,12 +1,20 @@
 import { Link, useOutletContext } from 'react-router-dom';
 import CtaBand from '../../components/common/CtaBand';
 import ContentIcon from '../../components/common/ContentIcon';
+<<<<<<< HEAD
+=======
+import useReveal from '../../utils/useReveal';
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
 import './Services.css';
 
 export default function Services() {
   const { site } = useOutletContext() || {};
   const services = site?.services || [];
   const workflow = site?.workflow || [];
+<<<<<<< HEAD
+=======
+  useReveal();
+>>>>>>> b0a71240b8dc4018f2b1e9dc9d9704b52c7b62b2
   return (
     <>
       <section className="page-hero"><div className="container"><span className="eyebrow">Our services</span><h1>Everything you need to <span className="grad-text">design, build and run</span> your product</h1><p>Pick a single service or bring us in end to end.</p></div></section>
